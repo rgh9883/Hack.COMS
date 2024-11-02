@@ -2,6 +2,7 @@ import express from 'express';
 import mysql from 'mysql2';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import * as utils from './api/utils.js';
 
 dotenv.config();
 
@@ -17,11 +18,11 @@ const db = mysql.createConnection({
 app.use(express.json());
 app.use(cors())
 
-
 const PORT = 3000;
 
 app.get("/", (req, res) => {
     res.send("Hello this is the Backend")
+    utils.executeSQLFile('test.sql', db)
 })
 
 app.get("/users", (req, res) => {
