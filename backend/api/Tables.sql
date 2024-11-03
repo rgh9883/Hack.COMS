@@ -1,0 +1,17 @@
+drop table if exists `users_table`;
+CREATE TABLE `users_table` (`user_id` int PRIMARY KEY auto_increment, `username` varchar(255), `role` varchar(255), `password` varchar(255), `email` varchar(255), `expertise` varchar(255));
+drop table if exists `roles_table`;
+CREATE TABLE `roles_table` (`role_id` int PRIMARY KEY auto_increment, `role_name` ENUM('mentor', 'mentee', 'both'));
+drop table if exists `user_roles_table`;
+CREATE TABLE `user_roles_table` (`user_role_id` int PRIMARY KEY auto_increment, `role_id` int unique, `user_id` int unique);
+drop table if exists `organizations_table`;
+CREATE TABLE `organizations_table` (`org_id` int PRIMARY KEY auto_increment, `org_name` varchar(255));
+drop table if exists `user_org_table`;
+CREATE TABLE `user_org_table` (`user_org_id` int PRIMARY KEY auto_increment, `user_id` int unique, `org_id` int unique);
+drop table if exists `request_table`;
+CREATE TABLE `request_table` (`request_id` int PRIMARY KEY auto_increment, `user_id` int unique, `request_type` ENUM('resume_review', 'elevator_pitch', 'class_help', 'business_idea'));
+ALTER TABLE `users_table` ADD FOREIGN KEY (`user_id`) REFERENCES `user_org_table` (`user_id`);
+ALTER TABLE `users_table` ADD FOREIGN KEY (`user_id`) REFERENCES `request_table` (`user_id`);
+ALTER TABLE `users_table` ADD FOREIGN KEY (`user_id`) REFERENCES `user_roles_table` (`user_id`);
+ALTER TABLE `organizations_table` ADD FOREIGN KEY (`org_id`) REFERENCES `user_org_table` (`org_id`);
+ALTER TABLE `roles_table` ADD FOREIGN KEY (`role_id`) REFERENCES `user_roles_table` (`role_id`);

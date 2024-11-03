@@ -6,15 +6,21 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export async function executeSQLFile(filePath, db) {
-    try {
-        // Read SQL file
-        const sql = fs.readFileSync(path.resolve(__dirname, filePath), 'utf-8');
-        console.log(sql)
-        // Execute SQL commands
-        const [result] = db.query(sql);
-        console.log('SQL file executed successfully:', result);
-      } catch (error) {
-        console.error('Error executing SQL file:', error);
-      }
+function executeSQLFile(filePath, db) {
+  const absolutePath = path.join(__dirname, filePath).trim();
+    
+    fs.readFile(absolutePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading the SQL file:', err);
+            return;
+        }
+        db.query(data, (err, results) => {
+            if (err) {
+                console.error('Error executing the SQL file:', err);
+                return;
+            }
+            console.log('SQL file executed successfully');
+        });
+    });
 }
+export { executeSQLFile };
