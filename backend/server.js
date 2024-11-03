@@ -48,22 +48,39 @@ app.post("/users", (req, res) => {
 })
 
 app.post("/createUser", (req, res) => {
-    const users_q = "INSERT INTO users_table (`username`, `password`, `email`, `role`, `organization`) VALUES (?)";
-    const users_values = [
+    const q = "INSERT INTO users_table (`username`, `password`, `email`, `role`, `organization`) VALUES (?)";
+    console.log(req.body)
+    const values = [
         req.body.username,
         req.body.password,
         req.body.email,
         req.body.role,
         req.body.organization
     ]
-    db.query(users_q, [users_values], (err, data) => {
+    db.query(q, [values], (err, data) => {
         if(err) return res.json(err);
         return res.json(data);
     })
 });
 
 app.post("/createRequest", (req, res) => {
-
+    const users_q = "select user_id from users_table where username = ?"
+    const users_value = req.body.username
+    let user_id
+    db.query(users_q, [users_value], (err, data) => {
+        if(err) return res.json(err);
+        user_id = data[0].user_id;
+        const req_q = "INSERT INTO request_table (`user_id`, `request_type`, `request_status`) VALUES (?)"
+        const req_value = [
+            user_id,
+            req.body.request_type,
+            req.body.request_status
+        ]
+        db.query(req_q, [req_value], (err, data) => {
+            if(err) return res.json(err);
+            return res.json(data);
+        })
+    });
 });
 
 app.put("/login", (req, res) => {
@@ -82,7 +99,20 @@ app.get("/getMenteeRequests", (req, res) => {
 });
 
 app.put("/updateRequest", (req, res) => {
+    const users_q = "select user_id from users_table where username = ?"
+    const users_value = req.body.username
+    let user_id
+    db.query(users_q, [users_value], (err, data) => {
+        if(err) return res.json(err);
+        user_id = data[0].user_id;
 
+        const req_q = "update request_table set request_status = ? where user_id = ?"
+        db.query(req_q, [req.body.request_status,
+            String(user_id)], (err, data) => {
+            if(err) return res.json(err);
+            return res.json(data);
+        })
+    });
 });
 
 app.delete("/deleteRequest", (req, res) => {
