@@ -8,13 +8,12 @@ function Dashboard(props){
     const [requests, setRequests] = useState([]);
     const [bgColor, setBGColor] = useState({});
     const navigate = useNavigate();
+    const { username } = useParams();
     const [newRequest, setNewRequest] = useState({
-        username: props.username,
+        username: username,
         request_type: "",
         request_status: "pending"
     })
-
-    const { username } = useParams();
     
     useEffect(() => {
         const fetchAllRequests = async () => {

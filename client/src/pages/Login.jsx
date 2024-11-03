@@ -36,7 +36,7 @@ function Login(){
             const data = await response.json(); // Parse the JSON response
             const userId = data.user.user_id; // Access the user ID
             console.log('Login successful. User ID:', userId);
-            navigate(`/dashboard?username=${loginUsername}`);
+            navigate(`/dashboard/${loginUsername}`);
         } else {
             // Handle error
             console.error('Login failed');
