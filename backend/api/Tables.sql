@@ -9,7 +9,7 @@ CREATE TABLE `organizations_table` (`org_id` int PRIMARY KEY auto_increment, `or
 drop table if exists `user_org_table`;
 CREATE TABLE `user_org_table` (`user_org_id` int PRIMARY KEY auto_increment, `user_id` int unique, `org_id` int unique);
 drop table if exists `request_table`;
-CREATE TABLE `request_table` (`request_id` int PRIMARY KEY auto_increment, `user_id` int unique, `request_type` ENUM('resume_review', 'elevator_pitch', 'class_help', 'business_idea'));
+CREATE TABLE `request_table` (`request_id` int PRIMARY KEY auto_increment, `user_id` int unique, `request_type` ENUM('resume_review', 'elevator_pitch', 'class_help', 'business_idea'), `request_status` ENUM('pending', 'matched', 'completed'));
 
 -- Sample data insertion
 
@@ -44,7 +44,7 @@ INSERT INTO `user_org_table` (`user_id`, `org_id`) VALUES
 (3, 3); -- Charlie in Youth Innovators
 
 -- REQUEST_TABLE
-INSERT INTO `request_table` (`user_id`, `request_type`) VALUES
-(1, 'resume_review'),  -- Alice requests resume review
-(2, 'class_help'),     -- Bob requests class help
-(3, 'business_idea');  -- Charlie requests business idea feedback
+INSERT INTO `request_table` (`user_id`, `request_type`, `request_status`) VALUES
+(1, 'resume_review', 'pending'),  -- Alice requests resume review
+(2, 'class_help', 'matched'),     -- Bob requests class help
+(3, 'business_idea', 'completed');  -- Charlie requests business idea feedback

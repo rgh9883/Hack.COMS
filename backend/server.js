@@ -23,7 +23,7 @@ const PORT = 3000;
 
 app.get("/", (req, res) => {
     res.send("Hello this is the Backend")
-    utils.executeSQLFile('Tables.sql', db)
+    utils.executeSQLFile('tables.sql', db)
 })
 
 app.get("/users", (req, res) => {
