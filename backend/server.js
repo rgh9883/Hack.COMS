@@ -127,20 +127,12 @@ app.get("/user", (req, res) => {
 });
 
 app.put("/updateRequest", (req, res) => {
-    const users_q = "select user_id from users_table where username = ?"
-    const users_value = req.body.username
-    let user_id
-    db.query(users_q, [users_value], (err, data) => {
+    const req_q = "update request_table set request_status = ? where request_id = ?"
+    db.query(req_q, [req.body.request_status,
+        req.body.request_id], (err, data) => {
         if(err) return res.json(err);
-        user_id = data[0].user_id;
-
-        const req_q = "update request_table set request_status = ? where user_id = ?"
-        db.query(req_q, [req.body.request_status,
-            String(user_id)], (err, data) => {
-            if(err) return res.json(err);
-            return res.json(data);
-        })
-    });
+        return res.json(data);
+    })
 });
 
 app.delete("/deleteRequest", (req, res) => {
