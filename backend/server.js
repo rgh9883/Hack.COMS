@@ -110,10 +110,10 @@ app.get("/user", (req, res) => {
         let param;
 
         if(role === "mentor" || role === "both") {
-            q = "SELECT * FROM request_table";
+            q = "SELECT r.*, u.username, u.email FROM request_table r LEFT JOIN users_table u ON r.user_id = u.user_id";
             param = [];
         } else if(role === "mentee") {
-            q = "SELECT * FROM request_table WHERE user_id = ?";
+            q = "SELECT r.*, u.username, u.email FROM request_table r LEFT JOIN users_table u ON r.user_id = u.user_id WHERE r.user_id = ?";
             param = [id];
         } else {
             return res.status(401).json({message: "Invalid role"})

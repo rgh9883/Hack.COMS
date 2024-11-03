@@ -151,11 +151,12 @@ function Dashboard(props){
             <div className='row row-cols-4 row-cols-md-4'>
                 {requests.map(request => (
                     <div className="col d-flex justify-content-center align-items-center">
-                    <div className="card" style={{width: "10rem", backgroundColor: bgColor[request.request_id] || 'white', margin: "2em"}}>
+                    <div className="card" style={{width: "auto", backgroundColor: bgColor[request.request_id] || 'white', margin: "2em"}}>
                         <div className="card-header">
-                            {request.request_type}
+                            {request.request_type.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}
                         </div>
                         <ul className="list-group list-group-flush">
+                        <li className="list-group-item">{request.username + ", " + request.email}</li>
                         <li className="list-group-item">
                             <select className="form-select" aria-label="Default select example" defaultValue={request.request_status} onChange={(event) => handleStatusChange(request.request_id, event)}>
                                 <option value="pending">Pending</option>
@@ -163,7 +164,7 @@ function Dashboard(props){
                                 <option value="completed">Completed</option>
                             </select>
                         </li>
-                        <li className="list-group-item d-flex justify-content-center"><button className='btn btn-danger' onClick={() => handleDeleteRequest(request.request_id)}>Delete</button></li>
+                        {request.username === username && <li className="list-group-item d-flex justify-content-center"><button className='btn btn-danger' onClick={() => handleDeleteRequest(request.request_id)}>Delete</button></li>}
                         </ul>
                   </div>
                   </div>
