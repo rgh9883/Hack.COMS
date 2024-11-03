@@ -12,7 +12,8 @@ const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB
+    database: process.env.DB,
+    multipleStatements: true
 });
 
 app.use(express.json());
@@ -22,7 +23,7 @@ const PORT = 3000;
 
 app.get("/", (req, res) => {
     res.send("Hello this is the Backend")
-    utils.executeSQLFile('test.sql', db)
+    utils.executeSQLFile('Tables.sql', db)
 })
 
 app.get("/users", (req, res) => {
