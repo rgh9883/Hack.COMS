@@ -66,6 +66,7 @@ app.post("/createUser", (req, res) => {
 app.post("/createRequest", (req, res) => {
     const users_q = "select user_id from users_table where username = ?"
     const users_value = req.body.username
+    console.log(users_value)
     let user_id
     db.query(users_q, [users_value], (err, data) => {
         if(err) return res.json(err);
@@ -125,6 +126,16 @@ app.get("/user", (req, res) => {
     });
 
 });
+
+app.get("/getRole", (req, res) => {
+    const username  = req.query.username;
+    const userQuery = "SELECT role FROM users_table WHERE username = ?";
+
+    db.query(userQuery, [username], (err, data) => {
+        if (err) return res.status(500).json({error: err.message});
+        return res.status(200).json({message: "Get successful", role: data});
+    })
+})
 
 app.put("/updateRequest", (req, res) => {
     const req_q = "update request_table set request_status = ? where request_id = ?"

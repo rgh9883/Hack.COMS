@@ -7,8 +7,9 @@ import { useParams } from 'react-router-dom';
 function Dashboard(props){
     const [requests, setRequests] = useState([]);
     const [bgColor, setBGColor] = useState({});
+    const [role, setRole] = useState("");
     const navigate = useNavigate();
-    const { username } = useParams();
+    const {username}  = useParams();
     const [newRequest, setNewRequest] = useState({
         username: username,
         request_type: "",
@@ -21,6 +22,9 @@ function Dashboard(props){
                 const res = await axios.get(`http://localhost:3000/user?username=${username}`);
                 setRequests(res.data.requests);
                 console.log(requests);
+                const res2 = await axios.get(`http://localhost:3000/getRole?username=${username}`);
+                setRole(res2.data.role[0].role);
+                console.log(role)
             } catch(err) {
                 console.log(err);
             }
@@ -94,19 +98,27 @@ function Dashboard(props){
 
     const handleRequestForm = (e) => {
         setNewRequest({
-            username: props.username,
+            username: username,
             request_type: e.target.value,
             request_status: "pending"
         })
-    } 
+    }
+    
+    const handleDeleteRequest = async (request) => {
+        try {
+            const res = await axios.delete(`http://localhost:3000/deleteRequest?requestId=${request}`);
+            console.log(res);
+            window.location.reload();
+        } catch(err) {
+            console.log(err)
+        }
+    }
 
     return (
         <>
             <nav className="navbar navbar-light bg-light">
                 <div className="container-fluid">
-                    <button type="button" class="btn btn-primary me-auto" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Create Request
-                    </button>
+                    {role != 'mentor' && <button type="button" class="btn btn-primary me-auto" data-bs-toggle="modal" data-bs-target="#exampleModal">Create Request</button>}
                     <div className="d-flex flex-grow-1">
                         <span className="navbar-brand mx-auto"><h1>{username}'s Requests</h1></span>
                     </div>
@@ -151,7 +163,7 @@ function Dashboard(props){
                                 <option value="completed">Completed</option>
                             </select>
                         </li>
-                        <li className="list-group-item d-flex justify-content-center"><button className='btn btn-danger' id={request.request_id}>Delete</button></li>
+                        <li className="list-group-item d-flex justify-content-center"><button className='btn btn-danger' onClick={() => handleDeleteRequest(request.request_id)}>Delete</button></li>
                         </ul>
                   </div>
                   </div>
