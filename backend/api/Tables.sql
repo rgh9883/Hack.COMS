@@ -10,8 +10,41 @@ drop table if exists `user_org_table`;
 CREATE TABLE `user_org_table` (`user_org_id` int PRIMARY KEY auto_increment, `user_id` int unique, `org_id` int unique);
 drop table if exists `request_table`;
 CREATE TABLE `request_table` (`request_id` int PRIMARY KEY auto_increment, `user_id` int unique, `request_type` ENUM('resume_review', 'elevator_pitch', 'class_help', 'business_idea'));
-ALTER TABLE `users_table` ADD FOREIGN KEY (`user_id`) REFERENCES `user_org_table` (`user_id`);
-ALTER TABLE `users_table` ADD FOREIGN KEY (`user_id`) REFERENCES `request_table` (`user_id`);
-ALTER TABLE `users_table` ADD FOREIGN KEY (`user_id`) REFERENCES `user_roles_table` (`user_id`);
-ALTER TABLE `organizations_table` ADD FOREIGN KEY (`org_id`) REFERENCES `user_org_table` (`org_id`);
-ALTER TABLE `roles_table` ADD FOREIGN KEY (`role_id`) REFERENCES `user_roles_table` (`role_id`);
+
+-- Sample data insertion
+
+-- USERS_TABLE
+INSERT INTO `users_table` (`username`, `role`, `password`, `email`, `expertise`) VALUES
+('Alice', 'mentor', 'password123', 'alice@example.com', 'Data Science'),
+('Bob', 'mentee', 'securepass', 'bob@example.com', 'Web Development'),
+('Charlie', 'both', 'charliepass', 'charlie@example.com', 'Cybersecurity');
+
+-- ROLES_TABLE
+INSERT INTO `roles_table` (`role_name`) VALUES
+('mentor'),
+('mentee'),
+('both');
+
+-- USER_ROLES_TABLE
+INSERT INTO `user_roles_table` (`role_id`, `user_id`) VALUES
+(1, 1), -- Alice as mentor
+(2, 2), -- Bob as mentee
+(3, 3); -- Charlie as both mentor and mentee
+
+-- ORGANIZATIONS_TABLE
+INSERT INTO `organizations_table` (`org_name`) VALUES
+('Tech for Good'),
+('Code Masters'),
+('Youth Innovators');
+
+-- USER_ORG_TABLE
+INSERT INTO `user_org_table` (`user_id`, `org_id`) VALUES
+(1, 1), -- Alice in Tech for Good
+(2, 2), -- Bob in Code Masters
+(3, 3); -- Charlie in Youth Innovators
+
+-- REQUEST_TABLE
+INSERT INTO `request_table` (`user_id`, `request_type`) VALUES
+(1, 'resume_review'),  -- Alice requests resume review
+(2, 'class_help'),     -- Bob requests class help
+(3, 'business_idea');  -- Charlie requests business idea feedback
