@@ -1,5 +1,5 @@
 drop table if exists `users_table`;
-CREATE TABLE `users_table` (`user_id` int PRIMARY KEY auto_increment, `username` varchar(255), `role` varchar(255), `password` varchar(255), `email` varchar(255), `expertise` varchar(255));
+CREATE TABLE `users_table` (`user_id` int PRIMARY KEY auto_increment, `username` varchar(255), `password` varchar(255), `email` varchar(255), `expertise` varchar(255));
 drop table if exists `roles_table`;
 CREATE TABLE `roles_table` (`role_id` int PRIMARY KEY auto_increment, `role_name` ENUM('mentor', 'mentee', 'both'));
 drop table if exists `user_roles_table`;
@@ -14,10 +14,10 @@ CREATE TABLE `request_table` (`request_id` int PRIMARY KEY auto_increment, `user
 -- Sample data insertion
 
 -- USERS_TABLE
-INSERT INTO `users_table` (`username`, `role`, `password`, `email`, `expertise`) VALUES
-('Alice', 'mentor', 'password123', 'alice@example.com', 'Data Science'),
-('Bob', 'mentee', 'securepass', 'bob@example.com', 'Web Development'),
-('Charlie', 'both', 'charliepass', 'charlie@example.com', 'Cybersecurity');
+INSERT INTO `users_table` (`username`, `password`, `email`, `expertise`) VALUES
+('Alice', 'password123', 'alice@example.com', 'Data Science'),
+('Bob', 'securepass', 'bob@example.com', 'Web Development'),
+('Charlie', 'charliepass', 'charlie@example.com', 'Cybersecurity');
 
 -- ROLES_TABLE
 INSERT INTO `roles_table` (`role_name`) VALUES

@@ -2,7 +2,7 @@ import express from 'express';
 import mysql from 'mysql2';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import * as utils from './api/utils.js';
+import * as utils from './utils.js';
 
 dotenv.config();
 
@@ -48,6 +48,8 @@ app.post("/users", (req, res) => {
 })
 
 app.post("/createUser", (req, res) => {
+    const q = "INSERT INTO users_table (`username`, `role`, `password`, `email`, `expertise`) VALUES (?)";
+
 
 });
 
