@@ -66,6 +66,8 @@ function Login(){
             const modalElement = document.getElementById('exampleModal');
             const modal = bootstrap.Modal.getInstance(modalElement); // Get the modal instance
             modal.hide();
+            setLoginUsername(signupUsername);
+            setLoginPassword(signupPassword);
         } else {
             // Handle error
             console.error('Sign up failed');
