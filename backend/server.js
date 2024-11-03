@@ -21,11 +21,13 @@ app.use(cors())
 
 const PORT = 3000;
 
+//HomePage
 app.get("/", (req, res) => {
     res.send("Hello this is the Backend")
     utils.executeSQLFile('tables.sql', db)
 })
 
+//Template Get
 app.get("/users", (req, res) => {
     const q  = "SELECT * FROM users";
     db.query(q, (err, data) => {
@@ -34,6 +36,7 @@ app.get("/users", (req, res) => {
     });
 })
 
+//Template Post
 app.post("/users", (req, res) => {
     const q = "INSERT INTO users (`FirstName`, `LastName`, `Password`) VALUES (?)";
     const values = ["Christopher", "West", "blablabla",];
@@ -43,6 +46,37 @@ app.post("/users", (req, res) => {
         return res.json(data);
     })
 })
+
+app.post("/createUser", (req, res) => {
+
+});
+
+app.post("/createRequest", (req, res) => {
+
+});
+
+app.put("/login", (req, res) => {
+    const { username, password } = req.body;
+    const q = "SELECT * FROM users_table WHERE username = ? AND password = ?";
+
+    db.query(q, [username, password], (err, data) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (data.length === 0) return res.status(401).json({ message: "Invalid credentials" });
+        return res.status(200).json({ message: "Login successful", user: data[0] });
+    });
+});
+
+app.get("/getMenteeRequests", (req, res) => {
+
+});
+
+app.put("/updateRequest", (req, res) => {
+
+});
+
+app.delete("/deleteRequest", (req, res) => {
+
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
