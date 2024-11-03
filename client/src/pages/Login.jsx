@@ -80,7 +80,7 @@ function Login(){
                             <h1>Sign In</h1>
                         </div>
                         <div class="d-flex justify-content-center w-100 mt-2">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <p>If you do not have an account, click Sign Up to create one!</p>
                         </div>
                         {/* Sign in form */}
                         <div>
