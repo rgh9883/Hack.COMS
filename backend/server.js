@@ -48,9 +48,18 @@ app.post("/users", (req, res) => {
 })
 
 app.post("/createUser", (req, res) => {
-    const q = "INSERT INTO users_table (`username`, `role`, `password`, `email`, `expertise`) VALUES (?)";
-
-
+    const users_q = "INSERT INTO users_table (`username`, `password`, `email`, `role`, `organization`) VALUES (?)";
+    const users_values = [
+        req.body.username,
+        req.body.password,
+        req.body.email,
+        req.body.role,
+        req.body.organization
+    ]
+    db.query(users_q, [users_values], (err, data) => {
+        if(err) return res.json(err);
+        return res.json(data);
+    })
 });
 
 app.post("/createRequest", (req, res) => {
