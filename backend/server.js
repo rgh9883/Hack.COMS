@@ -67,17 +67,45 @@ app.post("/createRequest", (req, res) => {
 });
 
 app.put("/login", (req, res) => {
-    const { username, password } = req.body;
+    const username = req.body.username;
+    const password = req.body.password;
     const q = "SELECT * FROM users_table WHERE username = ? AND password = ?";
-
     db.query(q, [username, password], (err, data) => {
-        if (err) return res.status(500).json({ error: err.message });
-        if (data.length === 0) return res.status(401).json({ message: "Invalid credentials" });
-        return res.status(200).json({ message: "Login successful", user: data[0] });
+        if (err) return res.status(500).json({error: err.message});
+        if (data.length === 0) return res.status(401).json({message: "Invalid credentials"});
+        return res.status(200).json({message: "Login successful", user: data[0]});
     });
 });
 
-app.get("/getMenteeRequests", (req, res) => {
+app.get("/user", (req, res) => {
+    const username  = req.query.username;
+    const userQuery = "SELECT user_id, role FROM users_table WHERE username = ?";
+
+    db.query(userQuery, [username], (err, userData) => {
+        if (err) return res.status(500).json({error: err.message});
+        if (userData.length === 0) return res,status(404).json({message: "User not Found"});
+
+        const id = userData[0].user_id;
+        const role = userData[0].role;
+        
+        let q;
+        let param;
+
+        if(role === "mentor" || role === "both") {
+            q = "SELECT * FROM request_table";
+            param = [];
+        } else if(role === "mentee") {
+            q = "SELECT * FROM request_table WHERE user_id = ?";
+            param = [id];
+        } else {
+            return res.status(401).json({message: "Invalid role"})
+        }
+
+        db.query(q, [param], (err, data) => {
+            if (err) return res.status(500).json({error: err.message});
+            return res.status(200).json({message: "Get successful", requests: data});
+        })
+    });
 
 });
 
@@ -86,6 +114,13 @@ app.put("/updateRequest", (req, res) => {
 });
 
 app.delete("/deleteRequest", (req, res) => {
+    const requestId = req.query.requestId;
+    const q = "DELETE FROM request_table WHERE request_id = ?";
+
+    db.query(q, [requestId], (err, data) => {
+        if (err) return res.status(500).json({error: err.message});
+        return res.status(200).json({message: "Delete successful", requests: data});
+    })
 
 });
 
