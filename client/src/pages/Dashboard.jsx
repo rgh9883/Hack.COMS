@@ -12,7 +12,7 @@ function Dashboard(props){
     const {username}  = useParams();
     const [newRequest, setNewRequest] = useState({
         username: username,
-        request_type: "",
+        request_type: "resume_review",
         request_status: "pending"
     })
     
@@ -89,7 +89,6 @@ function Dashboard(props){
     const handleCreateRequest = async () => {
         try {
             const res = await axios.post("http://localhost:3000/createRequest", newRequest);
-            console.log(res);
             window.location.reload();
         } catch(err) {
             console.log(err);
