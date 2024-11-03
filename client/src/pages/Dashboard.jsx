@@ -2,6 +2,7 @@ import * as bootstrap from 'bootstrap';
 import { useEffect, useState, props } from 'react';
 import axios from 'axios';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 function Dashboard(props){
     const [requests, setRequests] = useState([]);
@@ -12,11 +13,13 @@ function Dashboard(props){
         request_type: "",
         request_status: "pending"
     })
+
+    const { username } = useParams();
     
     useEffect(() => {
         const fetchAllRequests = async () => {
             try {
-                const res = await axios.get(`http://localhost:3000/user?username=${props.username}`);
+                const res = await axios.get(`http://localhost:3000/user?username=${username}`);
                 setRequests(res.data.requests);
                 console.log(requests);
             } catch(err) {
@@ -24,7 +27,7 @@ function Dashboard(props){
             }
         }
         fetchAllRequests()
-    }, [])
+    }, [username])
 
     useEffect(() => {
         const firstColors = {};
@@ -106,7 +109,7 @@ function Dashboard(props){
                         Create Request
                     </button>
                     <div className="d-flex flex-grow-1">
-                        <span className="navbar-brand mx-auto"><h1>{props.username}'s Requests</h1></span>
+                        <span className="navbar-brand mx-auto"><h1>{username}'s Requests</h1></span>
                     </div>
                     <button className="btn btn-outline-danger ms-auto" onClick={() => handleLogout()}>
                         Logout

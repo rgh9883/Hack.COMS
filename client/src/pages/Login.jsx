@@ -3,6 +3,7 @@ import '../scss/styles.scss'
 // Import all of Bootstrap's JS
 import * as bootstrap from 'bootstrap'
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 function Login(){
@@ -16,6 +17,8 @@ function Login(){
     const [email, setEmail] = useState('');
     const [role, setRole] = useState('');
     const [organization, setOrganization] = useState('');
+
+    const navigate = useNavigate();
 
     // Handle login form submission
     const handleLogin = async () => {
@@ -33,6 +36,7 @@ function Login(){
             const data = await response.json(); // Parse the JSON response
             const userId = data.user.user_id; // Access the user ID
             console.log('Login successful. User ID:', userId);
+            navigate(`/dashboard?username=${loginUsername}`);
         } else {
             // Handle error
             console.error('Login failed');
